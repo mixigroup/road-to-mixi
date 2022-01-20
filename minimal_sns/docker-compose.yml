@@ -1,0 +1,26 @@
+version: "3"
+
+networks:
+  front:
+    ipam:
+      config:
+        - subnet: 10.0.0.0/16
+
+volumes:
+  socket:
+    driver: local
+  log:
+    driver: local
+  docroot:
+    driver: local
+
+services:
+  app:
+    build: app/
+    container_name: minimal_sns_app
+    volumes: 
+      - socket:/var/run/unicorn/
+    networks:
+      - front
+    environment:
+      - "TZ=Asia/Tokyo"
