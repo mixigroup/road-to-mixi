@@ -31,19 +31,30 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
 #  app:
-#    build: ../problem1/app/
 #    container_name: minimal_sns_app
-#    volumes: 
+# NOTE: for ruby
+#    build: app/ruby
+#    volumes:
 #      - socket:/var/run/unicorn/
+# NOTE: for go
+#    build: app/go
+#    volumes:
+#      - ./app/go:/app
+#    ports:
+#      - "1323:1323"
 #    networks:
 #      - front
+#      - back
 #    environment:
-#      - "TZ=Asia/Tokyo"
+#      TZ: "Asia/Tokyo"
   db:
     image: mysql:latest
     container_name: db
+    hostname: db
     networks:
       - back
+    ports:
+      - "3306:3306"
     volumes:
       - ./mysql/my.cnf:/etc/mysql/my.cnf
       - ./mysql/conf.d/mysql.cnf:/etc/mysql/conf.d/mysql.cnf
@@ -51,3 +62,4 @@ services:
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: yes
       MYSQL_DATABASE: app
+      TZ: "Asia/Tokyo"
