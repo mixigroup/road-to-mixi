@@ -53,8 +53,6 @@ services:
     hostname: db
     networks:
       - back
-    ports:
-      - "3306:3306"
     volumes:
       - ./mysql/my.cnf:/etc/mysql/my.cnf
       - ./mysql/conf.d/mysql.cnf:/etc/mysql/conf.d/mysql.cnf
