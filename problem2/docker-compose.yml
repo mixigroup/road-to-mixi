@@ -1,0 +1,53 @@
+version: "3"
+
+networks:
+  front:
+    ipam:
+      config:
+        - subnet: 10.0.0.0/16
+  back:
+    ipam:
+      config:
+        - subnet: 10.10.0.0/16
+
+volumes:
+  socket:
+    driver: local
+  log:
+    driver: local
+  docroot:
+    driver: local
+
+services:
+  reverse_proxy:
+    image: nginx:latest
+    container_name: reverse_proxy
+    networks:
+      - front
+    ports:
+      - "8080:80"
+    volumes:
+      - ./docroot:/usr/share/nginx/html
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+#  app:
+#    build: ../problem1/app/
+#    container_name: minimal_sns_app
+#    volumes: 
+#      - socket:/var/run/unicorn/
+#    networks:
+#      - front
+#    environment:
+#      - "TZ=Asia/Tokyo"
+  db:
+    image: mysql:latest
+    container_name: db
+    networks:
+      - back
+    volumes:
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
+      - ./mysql/conf.d/mysql.cnf:/etc/mysql/conf.d/mysql.cnf
+      - ./mysql/0_init.sql:/docker-entrypoint-initdb.d/0_init.sql
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: yes
+      MYSQL_DATABASE: app
