@@ -5,6 +5,10 @@ networks:
     ipam:
       config:
         - subnet: 10.0.0.0/16
+  back:
+    ipam:
+      config:
+        - subnet: 10.10.0.0/16
 
 volumes:
   socket:
@@ -16,11 +20,33 @@ volumes:
 
 services:
   app:
-    build: app/
     container_name: minimal_sns_app
-    volumes: 
-      - socket:/var/run/unicorn/
+# NOTE: for ruby
+#    build: app/ruby
+#    volumes:
+#      - socket:/var/run/unicorn/
+# NOTE: for go
+#    build: app/go
+#    volumes:
+#      - ./app/go:/app
+#    ports:
+#      - "1323:1323"
     networks:
       - front
+      - back
     environment:
-      - "TZ=Asia/Tokyo"
+      TZ: "Asia/Tokyo"
+  db:
+    image: mysql:latest
+    container_name: db
+    hostname: db
+    networks:
+      - back
+    volumes:
+      - ./mysql/my.cnf:/etc/mysql/my.cnf
+      - ./mysql/conf.d/mysql.cnf:/etc/mysql/conf.d/mysql.cnf
+      - ./mysql/0_init.sql:/docker-entrypoint-initdb.d/0_init.sql
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: yes
+      MYSQL_DATABASE: app
+      TZ: "Asia/Tokyo"
