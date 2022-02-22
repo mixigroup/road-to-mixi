@@ -40,8 +40,6 @@ services:
 #    build: app/go
 #    volumes:
 #      - ./app/go:/app
-#    ports:
-#      - "1323:1323"
 #    networks:
 #      - front
 #      - back
