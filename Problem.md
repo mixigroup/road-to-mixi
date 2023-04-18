@@ -1,8 +1,8 @@
-# Road to Mixi 課題
+# Road to MIXI 課題
 
 # 課題1
 ## 前提
-Road to Mixi Mini SNS 00ではミニマルSNSのバックエンドAPIを実装していただきます。
+Road to MIXI Mini SNS 00ではミニマルSNSのバックエンドAPIを実装していただきます。
 
 このSNSはユーザー間にフレンド関係だけが設定できるSNSで、ユーザは
 
